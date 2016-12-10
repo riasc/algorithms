@@ -1,5 +1,4 @@
 # Algorithms
-## This repository is a collection of different algortihms.
 
-## Search
-Binary Search
+## Search Algorithms
+### Binary Search (a/k/a half-interval search or logarithmic search)
