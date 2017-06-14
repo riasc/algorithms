@@ -7,8 +7,10 @@ __license__ = "GPL"
 __email__ = "richard.schaefer@zoho.com"
 
 # binary search for element in list
-def binary_search(list, element):
+def binary_search(a, x):
+    left, right = 0, len(x)-1 # pointer for left and right side
 
-
-if __name__ == '__main__'
-    input = sys.stdin.read()
+if __name__ == '__main__':
+    print("asda")
+    inputdata = sys.stdin.read()
+    print(inputdata)
