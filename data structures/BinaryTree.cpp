@@ -47,7 +47,6 @@ Node* BinaryTree::search(int searchvalue) {
 
 
 
-
 int main() {
   BinaryTree bt;
   string menu;
