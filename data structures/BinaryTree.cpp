@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stddef.h>
 using namespace std;
 
 struct Node {
@@ -12,6 +13,7 @@ class BinaryTree {
     Node* root;
 
   public:
+    Node* getRoot();
     void preorder_tree_walk(Node *startnode);
     void inorder_tree_walk(Node *startnode);
     void postorder_tree_walk(Node *startnode);
@@ -25,6 +27,10 @@ class BinaryTree {
     Node* predecessor();
 };
 
+Node* BinaryTree::getRoot() {
+  return root;
+}
+
 void BinaryTree::preorder_tree_walk(Node *startnode) {
 }
 
@@ -37,14 +43,12 @@ void BinaryTree::postorder_tree_walk(Node *startnode) {
 }
 
 void BinaryTree::insert(Node *insertnode) {
-
-
+  Node * buf = NIL; // buffering nodes
 }
 
 Node* BinaryTree::search(int searchvalue) {
 
 }
-
 
 
 int main() {
