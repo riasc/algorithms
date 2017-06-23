@@ -4,8 +4,15 @@ using namespace std;
 
 struct Node {
   int key;
-  Node* left;
-  Node* right;
+  Node* left; // nodes left child
+  Node* right; // nodes right child
+  Node* parent; // nodes parent
+  // constructor 
+  Node() {
+    left = NULL;
+    right = NULL;
+    parent = NULL;
+  }
 };
 
 class BinaryTree {
@@ -24,8 +31,13 @@ class BinaryTree {
     void postorder_tree_walk(Node *startnode);
 
     void insert(Node* insertnode);
-    Node* search(int value);
+    Node* search(Node * x, int k);
     Node* search_iterative();
+
+    // replace subtree rooted at node u with the subtree rooted at node v
+    void transplant(Node * u, Node* v);
+
+
     Node* minimum();
     Node* maximum();
     Node* successor();
@@ -69,11 +81,17 @@ void BinaryTree::postorder_tree_walk(Node *startnode) {
 }
 
 // insert new node into binary tree
-void BinaryTree::insert(Node *insertnode) {
+void BinaryTree::insert(Node * insertnode) {
   Node * buff = NULL; // buffering nodes
   Node * elem  = get_root(); // start with provided root
   while ( elem != NULL ) { // 
     buff = elem; // 
+    cout << "insertnode:" << insertnode->key << endl;
+    cout << "elem" << elem->key << endl;
+    if (elem == NULL) {
+      cout << "nullptr" << endl; 
+    }
+
     if ( insertnode->key < elem->key ) {
       elem = elem->left;
     } else {
@@ -95,28 +113,47 @@ void BinaryTree::insert(Node *insertnode) {
 
 // search for value k starting with root x
 Node* BinaryTree::search(Node * x, int k) {
-  if ( x == NULL ) || ( k == x->key ) {
+  if (( x == NULL ) || ( k == x->key )) {
     return root; 
   }
   if ( k < x->key ) {
     return search( x->left, k); 
+  } else {
+    return search ( x->right, k); 
   }
-
-
 }
+
+// move subtrees u and v around
+void BinaryTree::transplant(Node * u, Node* v) {
+  if ( u->parent == NULL ) {
+    set_root(v); //  
+  } else {
+    if (u == u->parent->left) {
+      u->parent->left = v;
+    } else {
+          u->parent->right = v; 
+    }
+  }
+}
+
 
 int main() {
   BinaryTree bt; // create new binary tree object
   int menu = 0; // 
   Node * temp;
+  int value;
+  Node * searchres;
 
   while (1) {
     cout << endl<<endl;
-    cout << "(1) - insert node" << endl;
+    cout << "--------------------------------------------" << endl;
+    cout << "-- Operations on Binary Search Tree (BST) --" << endl;
+    cout << "--------------------------------------------" << endl;
+    cout << "(1) - insert node into tree" << endl;
     cout << "(2) - print tree (preorder tree walk)" << endl;
     cout << "(3) - print tree (inorder tree walk)" << endl;
     cout << "(4) - print tree (postorder tree walk)" << endl;
-    cout << "(5) - search for key" << endl;
+    cout << "(5) - search for key in tree" << endl;
     cout << "(9) - exit" << endl;
    
     cout << "please make your selection ";
@@ -142,6 +179,13 @@ int main() {
               break;
 
       case 5: cout << "search key" << endl;
+              cin >> value;
+              searchres = bt.search(bt.get_root(), value );
+              if ( searchres != NULL ) {
+                cout << "node with key = " << value << " has been found" <<endl;
+              } else {
+                cout << "node with key = " << value << " has not been found" <<endl;
+              }
               break;
 
       case 9: cout << "exit program - e called" << endl;
