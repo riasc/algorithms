@@ -59,26 +59,32 @@ void BinaryTree::set_root(Node * rootnode) {
 
 void BinaryTree::preorder_tree_walk(Node *startnode) {
   if ( startnode != NULL ) {
-    cout << "key: " << startnode->key << endl;
+    cout << "***Node has key=" << startnode->key << endl;
+    cout << "***Traverse left" << endl;
     preorder_tree_walk(startnode->left);
+    cout << "***Traverse right" << endl;
     preorder_tree_walk(startnode->right);
   }
 }
 
 void BinaryTree::inorder_tree_walk(Node *startnode) {
   if ( startnode != NULL ) {
-    preorder_tree_walk(startnode->left);
-    cout << "key: " << startnode->key << endl;
-    preorder_tree_walk(startnode->right);
+    cout << "***Traverse left" << endl;
+    inorder_tree_walk(startnode->left);
+    cout << "***Node has key=" << startnode->key << endl;
+    cout << "***Traverse right" << endl;
+    inorder_tree_walk(startnode->right);
   }
 }
 
 void BinaryTree::postorder_tree_walk(Node *startnode) {
   if ( startnode != NULL ) {
-    preorder_tree_walk(startnode->left);
-    preorder_tree_walk(startnode->right);
-    cout << "key: " << startnode->key << endl;
-  }
+    cout << "***Traverse left" << endl;
+    postorder_tree_walk(startnode->left);
+    cout << "***Traverse right" << endl;
+    postorder_tree_walk(startnode->right);
+    cout << "***Node has key=" << startnode->key << endl;
+  } 
 }
 
 // minimum node in the subtree rooted at x
@@ -103,8 +109,6 @@ void BinaryTree::insert(Node * insertnode) {
   Node * elem  = get_root(); // start with provided root
   while ( elem != NULL ) { // 
     buff = elem; // 
-    cout << "insertnode:" << insertnode->key << endl;
-    cout << "elem" << elem->key << endl;
     if (elem == NULL) {
       cout << "nullptr" << endl; 
     }
@@ -117,7 +121,8 @@ void BinaryTree::insert(Node * insertnode) {
   }
   insertnode->parent = buff;
   if ( buff == NULL ) {
-    cout << "binary tree is empty - set root" << endl;
+    cout << "*** BST is empty." << endl;
+    cout << "*** BST rooted at inserted node (key=" << insertnode->key << ")" << endl;
     set_root(insertnode);
   } else {
     if ( insertnode->key < buff->key ) {
@@ -132,7 +137,7 @@ void BinaryTree::insert(Node * insertnode) {
 // search for value k starting with root x
 Node* BinaryTree::search(Node * x, int k) {
   if (( x == NULL ) || ( k == x->key )) {
-    return root; 
+    return x; 
   }
   if ( k < x->key ) {
     return search( x->left, k); 
@@ -158,6 +163,7 @@ void BinaryTree::transplant( Node * u, Node* v ) {
 }
 
 void BinaryTree::delete_node( Node * z ) {
+  cout << "node to delete key=" << z->key << endl;
   if ( z->left == NULL ) { // tree has no left child
     transplant( z, z->right  ); // replace parent with right child
   } else {
@@ -171,6 +177,7 @@ void BinaryTree::delete_node( Node * z ) {
           y->right->parent = y;
         } 
         // y has no left child: parent of y is z
+        cout << "transplant node: " << z->key << "with node: " << y->key << endl;
         transplant( z,y );
         y->left = z->left;
         y->left->parent = y;
@@ -193,56 +200,66 @@ int main() {
     cout << "--------------------------------------------" << endl;
     cout << "-- Operations on Binary Search Tree (BST) --" << endl;
     cout << "--------------------------------------------" << endl;
-    cout << "(1) - insert node into tree" << endl;
-    cout << "(2) - print tree (preorder tree walk)" << endl;
-    cout << "(3) - print tree (inorder tree walk)" << endl;
-    cout << "(4) - print tree (postorder tree walk)" << endl;
-    cout << "(5) - search for key in tree" << endl;
-    cout << "(6) - delete node with key in tree" << endl;
-    cout << "(9) - exit" << endl;
-   
-    cout << "please make your selection ";
+    cout << "(1) - Insert" << endl;
+    cout << "(2) - Print (Preorder Tree Walk)" << endl;
+    cout << "(3) - Print (Inorder Tree Walk)" << endl;
+    cout << "(4) - Print (Postorder Tree Walk)" << endl;
+    cout << "(5) - Search" << endl;
+    cout << "(6) - Delete" << endl;
+    cout << "(9) - Exit" << endl;
+    cout << endl; 
+    cout << "-- Please make your selection: ";
     cin >> menu;
+
     switch(menu) {
-      case 1: temp = new Node;
-              cout << "key to insert ";
+      case 1: cout << endl; 
+              cout << "-- Insertion -- " << endl; 
+              temp = new Node;
+              cout << "*** Please enter the key of the node: ";
               cin >> temp->key; // get key input from user
               bt.insert(temp);
-              cout << "root" << bt.get_root()->key << endl;
+              cout << "*** Node with key=" << temp->key << " has been inserted." << endl;
               break;
 
-      case 2: cout << "start traversel (preorder tree walk)" << endl; 
+      case 2: cout << endl; 
+              cout << "-- Preorder Tree Walk (root, left, right) --" << endl; 
               bt.preorder_tree_walk(bt.get_root());
               break;
 
-      case 3: cout << "start traversel (inorder tree walk)" << endl; 
+      case 3: cout << endl; 
+              cout << "-- Inorder Tree Walk (left, root, right) --" << endl; 
               bt.inorder_tree_walk(bt.get_root());
               break;
       
-      case 4: cout << "start traversel (postorder tree walk)" << endl; 
+      case 4: cout << endl; 
+              cout << "-- Postorder Tree Walk -- (left, right, root)" << endl; 
               bt.postorder_tree_walk(bt.get_root());
               break;
 
-      case 5: cout << "search for key in tree" << endl;
-              cout << "- enter key of node to search" << endl;
+      case 5: cout << endl; 
+              cout << "-- Search --" << endl;
+              cout << "*** Please enter the key of the node: ";
               cin >> value;
               searchres = bt.search(bt.get_root(), value );
               if ( searchres != NULL ) {
-                cout << "node with key = " << value << " has been found" <<endl;
+                cout << "*** Node (key = " << value << ") has been found" << endl;
               } else {
-                cout << "node with key = " << value << " has not been found" <<endl;
+                cout << "*** Node (key = " << value << ") has not been found" << endl;
               }
               break;
 
-      case 6: cout << "delete node in tree" << endl;
-              cout << "- enter key of node to delete from tree" << endl;
-              cin >> del_cin;
-              del_node = bt.search( bt.get_root(), del_cin );
-              bt.delete_node( del_node );
-              cout << "node with key= " << del_cin << "has been removed from tree" << endl;
+      case 6: cout << endl; 
+              cout << "-- Delete --" << endl;
+              cout << "*** Please enter key of node: ";
+              cin >> del_cin; // read key of node from cin
+              del_node = bt.search( bt.get_root(), del_cin ); // search for node in tree
+              bt.delete_node( del_node ); // delete node
+              cout << "*** Node (key=" << del_cin << ") has been deleted" << endl;
               break;
 
-      case 9: cout << "exit program - e called" << endl;
+      case 9: cout << endl;
+              cout << "-- Exit --" << endl;
+              cout << "*** Program will be terminated" << endl;
               exit(0);
               break;
 
