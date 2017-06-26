@@ -39,10 +39,10 @@ class BinaryTree {
     void transplant(Node * u, Node* v);
     void delete_node( Node * z );
 
-    Node* tree_minimum( Node * x );
-    Node* tree_maximum( Node * x );
-    Node* successor();
-    Node* predecessor();
+    Node* bst_minimum( Node * x );
+    Node* bst_maximum( Node * x );
+    Node* bst_successor( Node * x );
+    Node* bst_predecessor( Node * x );
 };
 
 BinaryTree::BinaryTree() {
@@ -88,7 +88,7 @@ void BinaryTree::postorder_tree_walk(Node *startnode) {
 }
 
 // minimum node in the subtree rooted at x
-Node * BinaryTree::tree_minimum( Node * x ) {
+Node * BinaryTree::bst_minimum( Node * x ) {
   while( x->left != NULL ) { 
     x = x->left; // traverse left
   }
@@ -96,12 +96,31 @@ Node * BinaryTree::tree_minimum( Node * x ) {
 }
 
 // maximum node in the subtree rooted at x
-Node * BinaryTree::tree_maximum( Node * x ) {
+Node * BinaryTree::bst_maximum( Node * x ) {
   while( x->right != NULL ) {
     x = x->right; // traverse right 
   }
   return x;
 }
+
+Node * BinaryTree::bst_successor( Node * x ) {
+  if( x->right != NULL ) {
+    return bst_minimum( x->right ); 
+  }
+  Node * y = x->parent;
+  while( y != NULL && x == y->right ) {
+    x = y;
+    y = y->parent;
+  }
+  return y;
+}
+/*
+Node * BinaryTree::bst_predecessor( Node * x ) {
+
+} */
+
+
+
 
 // insert new node into binary tree
 void BinaryTree::insert(Node * insertnode) {
@@ -170,7 +189,7 @@ void BinaryTree::delete_node( Node * z ) {
     if ( z->right == NULL  ) { // tree has left child but no right child
       transplant ( z, z->left ); // replace parent with left child 
     } else { // tree has both a left and a right child
-        Node * y = tree_minimum( z->right ); // get successor of z (lies right of z)
+        Node * y = bst_minimum( z->right ); // get successor of z (lies right of z)
         if( y->parent != z  ) { 
           transplant( y, y->right );
           y->right = z->right;
